@@ -111,12 +111,11 @@ done
 echo ""
 
 cd $DILL_DIR
-# Override the function before launch
-function abort_full_node_resource_not_enough() {
-    echo "[Info] Skipped abort_full_node_resource_not_enough check."
-    return 0
-}
-export -f abort_full_node_resource_not_enough
+sed -i.bak '/function abort_full_node_resource_not_enough()/,/^}/c\
+function abort_full_node_resource_not_enough() {\
+    echo "[Info] Skipped resource check.";\
+    return 0;\
+}' "$DILL_DIR/utility.sh"
 ./1_launch_dill_node.sh $node_type
 if [ $? -ne 0 ]; then
 	exit $?
